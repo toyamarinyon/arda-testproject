@@ -31,6 +31,10 @@ gulp.task 'build:css', ->
     .src('src/styles/style.sass')
     .pipe sass
       indentedSyntax: true
+      includePaths:[
+        "node_modules/font-awesome/scss/",
+        "node_modules/bootstrap-sass/assets/stylesheets/"
+      ]
     .pipe(gulp.dest('public'))
 
 gulp.task 'build:web', shell.task [

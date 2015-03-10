@@ -30,6 +30,7 @@
     "mocha": "^2.1.0",
     "power-assert": "^0.10.0",
     "sinon": "^1.12.2",
-    "typescript": "1.4.1"
+    "typescript": "1.4.1",
+    "bootstrap-sass": "3.3.3"
   }
 }

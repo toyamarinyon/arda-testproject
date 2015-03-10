@@ -1,6 +1,8 @@
 .application-root
   .global-header
-  .base-container
-    .navigation
-    .contents
-      = props.children
+  .global-navigation
+  .base-container.container(style=props.style)
+    .row
+      .navigation.col-lg-2
+      .contents.col-lg-10
+        = props.children

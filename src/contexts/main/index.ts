@@ -12,7 +12,7 @@ class MainContext extends Arda.Context<d.Props, d.State, d.ComponentProps> {
   }
 
   public expandComponentProps(props, state): d.ComponentProps{
-    return {};
+    return {contentsHeight: state.contentsHeight};
   }
 }
 

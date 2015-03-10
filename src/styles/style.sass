@@ -1,6 +1,26 @@
 // from public/ to public/fonts
 $fa-font-path: "fonts"
-@import "node_modules/font-awesome/scss/font-awesome"
+@import font-awesome
+@import bootstrap/variables
+@import bootstrap/mixins
+@import bootstrap/normalize
+@import bootstrap/scaffolding
+@import bootstrap/grid
 
+html,body
+  height: 100%
+  font-family: "ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,Osaka,"ＭＳ Ｐゴシック","MS PGothic","MS Gothic","ＭＳ ゴシック","Helvetica Neue",Helvetica,Arial,sans-serif !important
 .application-root
-  background: #fefefe
+  .global-header
+    background: #fefefe
+    font-size: 14px
+    color: #565a5c
+    -webkit-font-smoothing: antialiased
+    height: 47px
+  .global-navigation
+    background-color: #565a5c
+    height: 40px
+  .base-container
+    .contents
+      background-color: #f5f5f5
+

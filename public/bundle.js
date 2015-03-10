@@ -16,7 +16,15 @@
 },{"./template":2}],2:[function(require,module,exports){
 module.exports = (function (React) {
   var jade_globals_props = typeof props === "undefined" ? undefined : props;
-  var fn = function(locals) {  var props = "props" in locals ? locals.props : jade_globals_props;
+  var fn = function(locals) {
+    function jade_fix_style(style) {
+      return "string" == typeof style ? style.split(";").filter(function(str) {
+        return str.split(":").length > 1;
+      }).reduce(function(obj, style) {
+        obj[style.split(":")[0]] = style.split(":").slice(1).join(":");
+        return obj;
+      }, {}) : style;
+    }  var props = "props" in locals ? locals.props : jade_globals_props;
     return function() {
       var tags = [];
       tags.push(React.createElement.apply(React, [ "div", {
@@ -25,14 +33,21 @@ module.exports = (function (React) {
         return [ React.createElement.apply(React, [ "div", {
           className: "global-header"
         } ]), React.createElement.apply(React, [ "div", {
-          className: "base-container"
+          className: "global-navigation"
+        } ]), React.createElement.apply(React, [ "div", {
+          style: jade_fix_style(props.style),
+          className: "base-container container"
         } ].concat(function() {
           return [ React.createElement.apply(React, [ "div", {
-            className: "navigation"
-          } ]), React.createElement.apply(React, [ "div", {
-            className: "contents"
+            className: "row"
           } ].concat(function() {
-            return [ props.children ];
+            return [ React.createElement.apply(React, [ "div", {
+              className: "navigation col-lg-2"
+            } ]), React.createElement.apply(React, [ "div", {
+              className: "contents col-lg-10"
+            } ].concat(function() {
+              return [ props.children ];
+            }.call(this))) ];
           }.call(this))) ];
         }.call(this))) ];
       }.call(this))));
@@ -222,6 +237,17 @@ module.exports = (function (React) {
 
   module.exports = React.createClass({
     mixins: [Arda.mixin],
+    componentDidMount: function() {
+      var componentHeight, dom, offsetTop, stretchHeight;
+      dom = this.getDOMNode();
+      offsetTop = dom.getBoundingClientRect().top;
+      stretchHeight = window.innerHeight - offsetTop;
+      componentHeight = dom.clientHeight;
+      if (componentHeight < stretchHeight) {
+        componentHeight = stretchHeight;
+      }
+      return this.dispatch("context:set-contents-height", componentHeight);
+    },
     render: function() {
       this.data = [
         {
@@ -243,12 +269,22 @@ module.exports = (function (React) {
   var jade_globals_props = typeof props === "undefined" ? undefined : props;
   var jade_globals_CommentList = typeof CommentList === "undefined" ? undefined : CommentList;
   var jade_globals_data = typeof data === "undefined" ? undefined : data;
-  var fn = function(locals) {  var props = "props" in locals ? locals.props : jade_globals_props;
+  var fn = function(locals) {
+    function jade_fix_style(style) {
+      return "string" == typeof style ? style.split(";").filter(function(str) {
+        return str.split(":").length > 1;
+      }).reduce(function(obj, style) {
+        obj[style.split(":")[0]] = style.split(":").slice(1).join(":");
+        return obj;
+      }, {}) : style;
+    }  var props = "props" in locals ? locals.props : jade_globals_props;
     var CommentList = "CommentList" in locals ? locals.CommentList : jade_globals_CommentList;
     var data = "data" in locals ? locals.data : jade_globals_data;
     return function() {
       var tags = [];
       tags.push(React.createElement.apply(React, [ "div", {
+        style: jade_fix_style(props.style),
+        id: "jsTest",
         className: "CommentBox"
       } ].concat(function() {
         return [ React.createElement.apply(React, [ "h2", {
@@ -296,6 +332,9 @@ module.exports = (function (React) {
   module.exports = React.createClass({
     mixins: [Arda.mixin, require('./actions')],
     render: function() {
+      this.style = {
+        height: this.props.contentsHeight
+      };
       return template(this);
     }
   });
@@ -305,12 +344,24 @@ module.exports = (function (React) {
 },{"../concerns/applicationContainer":1,"./actions":3,"./commentBox":10,"./template":13}],13:[function(require,module,exports){
 module.exports = (function (React) {
   var jade_globals_ApplicationContainer = typeof ApplicationContainer === "undefined" ? undefined : ApplicationContainer;
+  var jade_globals_style = typeof style === "undefined" ? undefined : style;
   var jade_globals_CommentBox = typeof CommentBox === "undefined" ? undefined : CommentBox;
-  var fn = function(locals) {  var ApplicationContainer = "ApplicationContainer" in locals ? locals.ApplicationContainer : jade_globals_ApplicationContainer;
+  var fn = function(locals) {
+    function jade_fix_style(style) {
+      return "string" == typeof style ? style.split(";").filter(function(str) {
+        return str.split(":").length > 1;
+      }).reduce(function(obj, style) {
+        obj[style.split(":")[0]] = style.split(":").slice(1).join(":");
+        return obj;
+      }, {}) : style;
+    }  var ApplicationContainer = "ApplicationContainer" in locals ? locals.ApplicationContainer : jade_globals_ApplicationContainer;
+    var style = "style" in locals ? locals.style : jade_globals_style;
     var CommentBox = "CommentBox" in locals ? locals.CommentBox : jade_globals_CommentBox;
     return function() {
       var tags = [];
-      tags.push(React.createElement.apply(React, [ ApplicationContainer, {} ].concat(function() {
+      tags.push(React.createElement.apply(React, [ ApplicationContainer, {
+        style: jade_fix_style(style)
+      } ].concat(function() {
         return [ React.createElement.apply(React, [ CommentBox, {
           testprops: "Year!"
         } ]) ];
@@ -396,7 +447,7 @@ var MainContext = (function (_super) {
         return {};
     };
     MainContext.prototype.expandComponentProps = function (props, state) {
-        return {};
+        return { contentsHeight: state.contentsHeight };
     };
     MainContext.component = require('../../components/main');
     MainContext.subscribers = [
@@ -411,6 +462,11 @@ var Sub = require('../sub/index');
 var subscriber = Arda.subscriber(function (context, subscribe) {
     subscribe('main:go-to-sub', function () {
         App.router.pushContext(Sub, {});
+    });
+    subscribe('context:set-contents-height', function (contentsHeight) {
+        context.update(function () {
+            return { contentsHeight: contentsHeight };
+        });
     });
 });
 module.exports = subscriber;
