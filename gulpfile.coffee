@@ -45,5 +45,5 @@ gulp.task 'watch', ['build'], ->
   gulp.watch 'src/**/*.coffee', ['build:coffee']
   gulp.watch 'src/**/*.ts', ['build:ts']
   gulp.watch 'src/**/*.jade', ['build:jade']
-  gulp.watch 'src/styles/**/*.scss', ['build:css']
+  gulp.watch 'src/styles/**/*.sass', ['build:css']
   gulp.watch 'lib/**/*', ['build:web']
