@@ -3,6 +3,7 @@ shell  = require 'gulp-shell'
 coffee = require 'gulp-coffee'
 sass   = require 'gulp-sass'
 jade   = require 'gulp-react-jade'
+webserver   = require 'gulp-webserver'
 
 gulp.task 'default', ['build']
 gulp.task 'build', [
@@ -47,3 +48,10 @@ gulp.task 'watch', ['build'], ->
   gulp.watch 'src/**/*.jade', ['build:jade']
   gulp.watch 'src/styles/**/*.sass', ['build:css']
   gulp.watch 'lib/**/*', ['build:web']
+
+gulp.task 'webserver', ->
+  gulp.src './'
+    .pipe webserver
+      livereload: true
+
+gulp.task 'development', ['webserver','build','watch']
