@@ -28,8 +28,9 @@ gulp.task 'build:jade', ->
 
 gulp.task 'build:css', ->
   gulp
-    .src('src/styles/style.scss')
-    .pipe(sass())
+    .src('src/styles/style.sass')
+    .pipe sass
+      indentedSyntax: true
     .pipe(gulp.dest('public'))
 
 gulp.task 'build:web', shell.task [
