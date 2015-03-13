@@ -3,6 +3,21 @@
   .global-navigation
   .base-container.container(style=props.style)
     .row
-      .navigation.col-lg-2
-      .contents.col-lg-10
+      nav.navigation.col-lg-3
+        ul.nav
+          li
+            a システム稼働状況
+            ul.nav
+              li
+                a アプリケーションエラーの確認
+              li
+                a アクセスログの確認
+              li
+                a メール文面の作成
+          li
+            a 週別効果データの作成
+            ul.nav
+              li
+                a 週別効果データの作成
+      .contents.col-lg-9
         = props.children

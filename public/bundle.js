@@ -41,10 +41,48 @@ module.exports = (function (React) {
           return [ React.createElement.apply(React, [ "div", {
             className: "row"
           } ].concat(function() {
-            return [ React.createElement.apply(React, [ "div", {
-              className: "navigation col-lg-2"
-            } ]), React.createElement.apply(React, [ "div", {
-              className: "contents col-lg-10"
+            return [ React.createElement.apply(React, [ "nav", {
+              className: "navigation col-lg-3"
+            } ].concat(function() {
+              return [ React.createElement.apply(React, [ "ul", {
+                className: "nav"
+              } ].concat(function() {
+                return [ React.createElement.apply(React, [ "li", {} ].concat(function() {
+                  return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                    return [ "システム稼働状況" ];
+                  }.call(this))), React.createElement.apply(React, [ "ul", {
+                    className: "nav"
+                  } ].concat(function() {
+                    return [ React.createElement.apply(React, [ "li", {} ].concat(function() {
+                      return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                        return [ "アプリケーションエラーの確認" ];
+                      }.call(this))) ];
+                    }.call(this))), React.createElement.apply(React, [ "li", {} ].concat(function() {
+                      return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                        return [ "アクセスログの確認" ];
+                      }.call(this))) ];
+                    }.call(this))), React.createElement.apply(React, [ "li", {} ].concat(function() {
+                      return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                        return [ "メール文面の作成" ];
+                      }.call(this))) ];
+                    }.call(this))) ];
+                  }.call(this))) ];
+                }.call(this))), React.createElement.apply(React, [ "li", {} ].concat(function() {
+                  return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                    return [ "週別効果データの作成" ];
+                  }.call(this))), React.createElement.apply(React, [ "ul", {
+                    className: "nav"
+                  } ].concat(function() {
+                    return [ React.createElement.apply(React, [ "li", {} ].concat(function() {
+                      return [ React.createElement.apply(React, [ "a", {} ].concat(function() {
+                        return [ "週別効果データの作成" ];
+                      }.call(this))) ];
+                    }.call(this))) ];
+                  }.call(this))) ];
+                }.call(this))) ];
+              }.call(this))) ];
+            }.call(this))), React.createElement.apply(React, [ "div", {
+              className: "contents col-lg-9"
             } ].concat(function() {
               return [ props.children ];
             }.call(this))) ];
@@ -1066,7 +1104,7 @@ module.exports = SubContext;
  * 
  */
 /**
- * bluebird build version 2.9.13
+ * bluebird build version 2.9.14
  * Features enabled: core, race, call_get, generators, map, nodeify, promisify, props, reduce, settle, some, progress, cancel, using, filter, any, each, timers
 */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.Promise=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof _dereq_=="function"&&_dereq_;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof _dereq_=="function"&&_dereq_;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
@@ -4786,11 +4824,8 @@ Promise.reduce = function (promises, fn, initialValue, _each) {
 "use strict";
 var schedule;
 if (_dereq_("./util.js").isNode) {
-    var version = process.versions.node.split(".").map(Number);
-    schedule = (version[0] === 0 && version[1] > 10) || (version[0] > 0)
-        ? global.setImmediate : process.nextTick;
-}
-else if (typeof MutationObserver !== "undefined") {
+    schedule = process.nextTick;
+} else if (typeof MutationObserver !== "undefined") {
     schedule = function(fn) {
         var div = document.createElement("div");
         var observer = new MutationObserver(fn);
@@ -4798,13 +4833,11 @@ else if (typeof MutationObserver !== "undefined") {
         return function() { div.classList.toggle("foo"); };
     };
     schedule.isStatic = true;
-}
-else if (typeof setTimeout !== "undefined") {
+} else if (typeof setTimeout !== "undefined") {
     schedule = function (fn) {
         setTimeout(fn, 0);
     };
-}
-else {
+} else {
     schedule = function() {
         throw new Error("No async scheduler available\u000a\u000a    See http://goo.gl/m3OTXk\u000a");
     };
@@ -10408,7 +10441,7 @@ if ("production" !== process.env.NODE_ENV) {
   }
 }
 
-React.version = '0.13.0-rc2';
+React.version = '0.13.0';
 
 module.exports = React;
 
@@ -12106,7 +12139,7 @@ ReactComponent.prototype.setState = function(partialState, callback) {
  * You may want to call this when you know that some deeper aspect of the
  * component's state has changed but `setState` was not called.
  *
- * This will not invoke `shouldUpdateComponent`, but it will invoke
+ * This will not invoke `shouldComponentUpdate`, but it will invoke
  * `componentWillUpdate` and `componentDidUpdate`.
  *
  * @param {?function} callback Called after update is complete.
@@ -12129,6 +12162,7 @@ if ("production" !== process.env.NODE_ENV) {
   var deprecatedAPIs = {
     getDOMNode: 'getDOMNode',
     isMounted: 'isMounted',
+    replaceProps: 'replaceProps',
     replaceState: 'replaceState',
     setProps: 'setProps'
   };
@@ -12403,6 +12437,20 @@ var ReactCompositeComponentMixin = {
 
     // Initialize the public class
     var inst = new Component(publicProps, publicContext);
+
+    if ("production" !== process.env.NODE_ENV) {
+      // This will throw later in _renderValidatedComponent, but add an early
+      // warning now to help debugging
+      ("production" !== process.env.NODE_ENV ? warning(
+        inst.render != null,
+        '%s(...): No `render` method found on the returned component ' +
+        'instance: you may have forgotten to define `render` in your ' +
+        'component or you may have accidentally tried to render an element ' +
+        'whose type is a function that isn\'t a React component.',
+        Component.displayName || Component.name || 'Component'
+      ) : null);
+    }
+
     // These should be set up in the constructor, but as a convenience for
     // simpler class abstractions, we set them up after the fact.
     inst.props = publicProps;
@@ -15661,17 +15709,12 @@ var ReactDefaultPerf = {
           addValue(entry.inclusive, rootNodeID, totalTime);
         }
 
-        var displayName = null;
-        if (this._instance.constructor.displayName) {
-          displayName = this._instance.constructor.displayName;
-        } else if (this._currentElement.type) {
-          displayName = this._currentElement.type;
-        }
-
         entry.displayNames[rootNodeID] = {
-          current: displayName,
+          current: typeof this._currentElement.type === 'string' ?
+            this._currentElement.type :
+            this.getName(),
           owner: this._currentElement._owner ?
-            this._currentElement._owner._instance.constructor.displayName :
+            this._currentElement._owner.getName() :
             '<root>'
         };
 
@@ -19880,6 +19923,7 @@ function isNode(propValue) {
   switch (typeof propValue) {
     case 'number':
     case 'string':
+    case 'undefined':
       return true;
     case 'boolean':
       return !propValue;
@@ -19887,7 +19931,7 @@ function isNode(propValue) {
       if (Array.isArray(propValue)) {
         return propValue.every(isNode);
       }
-      if (ReactElement.isValidElement(propValue)) {
+      if (propValue === null || ReactElement.isValidElement(propValue)) {
         return true;
       }
       propValue = ReactFragment.extractIfFragment(propValue);
