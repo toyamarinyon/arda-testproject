@@ -53,5 +53,6 @@ gulp.task 'webserver', ->
   gulp.src './'
     .pipe webserver
       livereload: true
+      host: '0.0.0.0'
 
 gulp.task 'development', ['webserver','build','watch']
